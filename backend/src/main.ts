@@ -3,18 +3,20 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // Enable CORS
+
+  // 1. Enable CORS for your future Vercel frontend
   app.enableCors({
     origin: process.env.FRONTEND_URL || '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
 
-  // IMPORTANT: Only listen to the PORT variable
-  // Do NOT put a URL string here
+  // 2. IMPORTANT: Port must be a number from the environment variable
+  // Render will inject the correct port into process.env.PORT
   const port = process.env.PORT || 10000;
-  await app.listen(port, '0.0.0.0'); // '0.0.0.0' allows external connections
-  console.log(`Application is running on port: ${port}`);
+
+  // 3. Bind to 0.0.0.0 to ensure it's accessible externally
+  await app.listen(port, '0.0.0.0');
+  console.log(`🚀 Server is internally listening on port: ${port}`);
 }
-bootstrap();
 bootstrap();
